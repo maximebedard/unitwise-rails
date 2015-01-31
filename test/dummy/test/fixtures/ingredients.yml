@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  protein_value: MyString
+  protein_unit: MyString
+  carbohydrate_value: MyString
+  carbohydrate_unit: MyString
+
+two:
+  protein_value: MyString
+  protein_unit: MyString
+  carbohydrate_value: MyString
+  carbohydrate_unit: MyString
