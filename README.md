@@ -1,5 +1,9 @@
 # [unitwise-rails](http://github.com/maximebedard/unitwise-rails)
 
+[![Code Climate](https://codeclimate.com/github/maximebedard/unitwise-rails/badges/gpa.svg)](https://codeclimate.com/github/maximebedard/unitwise-rails)
+
+[![Circle CI](https://circleci.com/gh/maximebedard/unitwise-rails.svg?style=svg)](https://circleci.com/gh/maximebedard/unitwise-rails)
+
 unitwise-rails is a gem that provides rails extension to the the refined
 [unitwise](https://github.com/joshwlewis/unitwise) gem.
 
