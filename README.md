@@ -1,8 +1,6 @@
 # [unitwise-rails](http://github.com/maximebedard/unitwise-rails)
 
-[![Code Climate](https://codeclimate.com/github/maximebedard/unitwise-rails/badges/gpa.svg)](https://codeclimate.com/github/maximebedard/unitwise-rails)
-
-[![Circle CI](https://circleci.com/gh/maximebedard/unitwise-rails.svg?style=svg)](https://circleci.com/gh/maximebedard/unitwise-rails)
+[![Code Climate](https://codeclimate.com/github/maximebedard/unitwise-rails/badges/gpa.svg)](https://codeclimate.com/github/maximebedard/unitwise-rails) [![Circle CI](https://circleci.com/gh/maximebedard/unitwise-rails.svg?style=svg)](https://circleci.com/gh/maximebedard/unitwise-rails)
 
 unitwise-rails is a gem that provides rails extension to the the refined
 [unitwise](https://github.com/joshwlewis/unitwise) gem.
@@ -47,11 +45,15 @@ end
 # Add a method #protein to the model that will always be converted to grams
 class Ingredient < ActiveRecord::Base
   # Add unit with automatic conversion to grams before save
-  unit_for :protein, convert_to: 'g'
+  unit_for :protein, convert_to: :gram
 
   # Add unit with compatibility validation
   unit_for :carbohydrate
-  validate_unit :carbohydrate, compatibility_with: :mass, presence: true
+  validates_unit_compatibility_of :carbohydrate, with: :gram
+  validates_unit_presence_of :carbohydrate
+
+  # or
+  validates_unit :carbohydrate, presence: true, compatibility: :gram
 end
 ```
 
@@ -59,4 +61,7 @@ end
 
 - [x] Add `unit_for` extension to ActiveRecord::Base
 - [x] Add `unit` generation to migrations
-- [ ] Add `validate_unit` Validator
+- [ ] Add `validates_unit` validator
+- [x] Add `validates_unit_compatibility_of` validator
+- [x] Add `validates_unit_presence_of` validator
+- [ ] Add `Unitwise::Rails::Migration` tests
