@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(version: 20150119025813) do
 
   create_table "ingredients", force: true do |t|
-    t.string   "protein_value"
+    t.decimal  "protein_value"
     t.string   "protein_unit"
-    t.string   "carbohydrate_value"
+    t.decimal  "carbohydrate_value"
     t.string   "carbohydrate_unit"
     t.datetime "created_at"
     t.datetime "updated_at"

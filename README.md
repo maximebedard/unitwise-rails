@@ -42,7 +42,12 @@ end
 ```ruby
 # Add a method #protein to the model that will always be converted to grams
 class Ingredient < ActiveRecord::Base
+  # Add unit with automatic conversion to grams before save
   unit_for :protein, convert_to: 'g'
+
+  # Add unit with compatibility validation
+  unit_for :carbohydrate
+  validate_unit :carbohydrate, compatibility_with: :mass, presence: true
 end
 ```
 
@@ -50,8 +55,4 @@ end
 
 - [x] Add `unit_for` extension to ActiveRecord::Base
 - [x] Add `unit` generation to migrations
-- [ ] Add `validate_compatibility_of` Validator
-- [ ] Add specs
-  - [ ] unit_for
-  - [ ] schema
-  - [ ] validator
+- [ ] Add `validate_unit` Validator

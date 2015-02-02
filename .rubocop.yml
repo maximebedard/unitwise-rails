@@ -1,0 +1,5 @@
+Documentation:
+  Enabled: false
+AllCops:
+  Exclude:
+    - 'test/dummy/**/*'

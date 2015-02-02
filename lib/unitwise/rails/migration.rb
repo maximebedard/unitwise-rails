@@ -1,7 +1,7 @@
 module Unitwise
   module Rails
     # Provides helper methods that can be used in migrations.
-    module Schema
+    module Migration
       extend ActiveSupport::Concern
 
       COLUMNS = {
