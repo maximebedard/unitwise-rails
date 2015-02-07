@@ -1,11 +1,11 @@
 module Unitwise
   module Rails
     module Validators
-      class CompatibilityValidator < UnitValidatorBase
+      class UnitCompatibilityValidator < UnitValidatorBase
         def validate_each(record, attribute, _value)
           return unless record.send("#{attribute}?")
           return if compatible?(record, attribute)
-          record.errors.add(attribute, 'asdasd', options)
+          record.errors.add(attribute, :confirmation, attribute: options[:with])
         end
 
         def check_validity!
@@ -24,7 +24,7 @@ module Unitwise
 
       module HelperMethods
         def validates_unit_compatibility_of(*attributes)
-          validates_with CompatibilityValidator, _merge_attributes(attributes)
+          validates_with UnitCompatibilityValidator, _merge_attributes(attributes)
         end
       end
     end

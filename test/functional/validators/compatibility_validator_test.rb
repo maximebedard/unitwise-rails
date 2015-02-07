@@ -11,7 +11,7 @@ class ValidatorsTest < ActiveSupport::TestCase
 
     subject.protein = Unitwise(1, 'watt')
     assert subject.invalid?
-    assert ['asdasd'], subject.errors[:protein]
+    assert_equal ["doesn't match gram"], subject.errors[:protein]
 
     subject.protein = Unitwise(1, 'g')
     assert subject.valid?
@@ -34,7 +34,7 @@ class ValidatorsTest < ActiveSupport::TestCase
   end
 
   test 'validate compatibility of a non existant attribute raises' do
-    Ingredient.validates_unit_compatibility_of(:invalid_attr, with: :invalid_unit)
+    Ingredient.validates_unit_compatibility_of(:invalid_attr, with: :invalid)
     subject = Ingredient.new
 
     assert_raise(ArgumentError) { subject.valid? }
