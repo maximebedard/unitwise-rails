@@ -1,4 +1,4 @@
-require 'unitwise/rails/validators/unit_compatibility_validator'
+require 'unitwise/rails/validators/compatibility_validator'
 
 module Unitwise
   module Rails

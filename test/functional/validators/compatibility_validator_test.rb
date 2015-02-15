@@ -25,16 +25,8 @@ class CompatibilityValidatorTest < ActiveSupport::TestCase
     assert_raise(Unitwise::ExpressionError) { subject.valid? }
   end
 
-  test 'validate unit compatibility of a non unit attribute raises' do
-    Ingredient.validates_unit_compatibility_of(:protein_unit, with: :gram)
-    subject = Ingredient.new
-
-    subject.protein = Unitwise(1, 'g')
-    assert_raise(ArgumentError) { subject.valid? }
-  end
-
-  test 'validate compatibility with a custom method as with option' do
-    Ingredient.validates_unit_compatibility_of(:protein, with: :my_custom_unit)
+  test 'validate compatibility with a lambda' do
+    Ingredient.validates(:protein, compatibility: { with: :my_custom_unit })
     subject = Ingredient.new
 
     subject.protein = Unitwise(1, 'mg')

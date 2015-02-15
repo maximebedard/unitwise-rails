@@ -1,12 +1,15 @@
 module Unitwise
   module Rails
     module Helpers
-      def eval_option(option, record)
-        case option
-        when Symbol
-          return record.send option if record.respond_to?(option)
+      def fetch_option(record, name) # sketchy
+        option = options[name]
+        if option.respond_to?(:call)
+          option.call
+        elsif record.respond_to?(option)
+          record.send(option)
+        else
+          option
         end
-        option
       end
     end
   end

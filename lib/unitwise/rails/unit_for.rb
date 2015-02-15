@@ -10,19 +10,18 @@ module Unitwise
         def unit_for(*attributes, **options)
           attributes.each do |attrib|
             UnitForImpl.define_on(self, attrib, options)
-            units << { name: attrib, options: options }
+            units[attrib] = options
           end
         end
 
         def units
-          @units ||= []
+          @units ||= {}
         end
       end
     end
 
     class UnitForImpl
-      include Helpers
-
+      include Unitwise::Rails::Helpers
       def self.define_on(klass, name, **options)
         new(klass, name, options).define
       end
@@ -32,6 +31,8 @@ module Unitwise
         @name = name
         @options = options
       end
+
+      attr_reader :klass, :name, :options
 
       def define
         define_getter
@@ -46,7 +47,7 @@ module Unitwise
       # :attr_unit are present
       def define_query
         name = @name
-        @klass.send :define_method, "#{name}?" do
+        klass.send :define_method, "#{name}?" do
           send("#{name}_value").present? &&
             send("#{name}_unit").present?
         end
@@ -56,7 +57,7 @@ module Unitwise
       # from fields :attr_value and :attr_unit
       def define_getter
         name = @name
-        @klass.send :define_method, "#{name}" do
+        klass.send :define_method, "#{name}" do
           return unless send("#{name}?")
           Unitwise(send("#{name}_value"), send("#{name}_unit"))
         end
@@ -66,7 +67,7 @@ module Unitwise
       # Unitwise::Mesurement
       def define_setter
         name = @name
-        @klass.send :define_method, "#{name}=" do |unit|
+        klass.send :define_method, "#{name}=" do |unit|
           send "#{name}_value=", unit.value
           send "#{name}_unit=", unit.unit.to_s
         end
@@ -75,8 +76,8 @@ module Unitwise
       def define_callback
         return unless @options.key? :convert_to
         name = @name
-        convert_to_option = eval_option(@options[:convert_to], @klass)
-        @klass.send :before_save do
+        convert_to_option = fetch_option(klass, :convert_to)
+        klass.send :before_save do
           next unless send("#{name}?")
           send("#{name}=", send(name).convert_to(convert_to_option))
         end
