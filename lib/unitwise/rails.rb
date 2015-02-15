@@ -1,6 +1,7 @@
 require 'unitwise'
 
 require 'unitwise/rails/version'
+require 'unitwise/rails/helpers'
 require 'unitwise/rails/unit_for'
 require 'unitwise/rails/migration'
 require 'unitwise/rails/validators'

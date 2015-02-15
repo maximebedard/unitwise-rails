@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 20150119025813) do
     t.string   "protein_unit"
     t.decimal  "carbohydrate_value"
     t.string   "carbohydrate_unit"
+    t.decimal  "iron_value"
+    t.string   "iron_unit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

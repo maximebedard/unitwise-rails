@@ -5,20 +5,29 @@ module Unitwise
 
       included do
       end
+
       module ClassMethods
-        def unit_for(*attributes)
-          options = attributes.extract_options!
-          attributes.each { |attr| UnitForImpl.define_on(self, attr, options) }
+        def unit_for(*attributes, **options)
+          attributes.each do |attrib|
+            UnitForImpl.define_on(self, attrib, options)
+            units << { name: attrib, options: options }
+          end
+        end
+
+        def units
+          @units ||= []
         end
       end
     end
 
     class UnitForImpl
-      def self.define_on(klass, name, options = {})
+      include Helpers
+
+      def self.define_on(klass, name, **options)
         new(klass, name, options).define
       end
 
-      def initialize(klass, name, options)
+      def initialize(klass, name, **options)
         @klass = klass
         @name = name
         @options = options
@@ -33,24 +42,28 @@ module Unitwise
 
       private
 
-      # Returns true if the :attr_value and :attr_unit are present
+      # Returns true if the :attr_value and
+      # :attr_unit are present
       def define_query
         name = @name
         @klass.send :define_method, "#{name}?" do
-          send("#{name}_value").present? && send("#{name}_unit").present?
+          send("#{name}_value").present? &&
+            send("#{name}_unit").present?
         end
       end
 
-      # Returns a Unitwise::Mesurement builded from fields :attr_value and :attr_unit
+      # Returns a Unitwise::Mesurement builded
+      # from fields :attr_value and :attr_unit
       def define_getter
         name = @name
         @klass.send :define_method, "#{name}" do
-          return nil unless send("#{name}?")
+          return unless send("#{name}?")
           Unitwise(send("#{name}_value"), send("#{name}_unit"))
         end
       end
 
-      # Sets :attr_value and :attr_unit from the Unitwise::Mesurement
+      # Sets :attr_value and :attr_unit from the
+      # Unitwise::Mesurement
       def define_setter
         name = @name
         @klass.send :define_method, "#{name}=" do |unit|
@@ -60,11 +73,12 @@ module Unitwise
       end
 
       def define_callback
-        options = @options
+        return unless @options.key? :convert_to
         name = @name
-        return unless options.key? :convert_to
+        convert_to_option = eval_option(@options[:convert_to], @klass)
         @klass.send :before_save do
-          send("#{name}=", send(name).convert_to(options[:convert_to]))
+          return unless send("#{name}?")
+          send("#{name}=", send(name).convert_to(convert_to_option))
         end
       end
     end

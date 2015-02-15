@@ -44,4 +44,10 @@ class UnitForTest < ActiveSupport::TestCase
     assert_equal 100, @subject.carbohydrate_value
     assert_equal 'g', @subject.carbohydrate_unit
   end
+
+  test '#units return a hash with all the units and their options' do
+    units = [{ name: :protein, options: {} },
+             { name: :carbohydrate, options: { convert_to: 'g' } }]
+    assert_equal units, Ingredient.units
+  end
 end

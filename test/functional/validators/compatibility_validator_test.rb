@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ValidatorsTest < ActiveSupport::TestCase
+class CompatibilityValidatorTest < ActiveSupport::TestCase
   def teardown
     Ingredient.clear_validators!
   end
@@ -33,14 +33,7 @@ class ValidatorsTest < ActiveSupport::TestCase
     assert_raise(ArgumentError) { subject.valid? }
   end
 
-  test 'validate compatibility of a non existant attribute raises' do
-    Ingredient.validates_unit_compatibility_of(:invalid_attr, with: :invalid)
-    subject = Ingredient.new
-
-    assert_raise(ArgumentError) { subject.valid? }
-  end
-
-  test 'validate compatibility with a custom method as with options' do
+  test 'validate compatibility with a custom method as with option' do
     Ingredient.validates_unit_compatibility_of(:protein, with: :my_custom_unit)
     subject = Ingredient.new
 
