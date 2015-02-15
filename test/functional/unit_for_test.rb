@@ -45,6 +45,11 @@ class UnitForTest < ActiveSupport::TestCase
     assert_equal 'g', @subject.carbohydrate_unit
   end
 
+  test 'before save do nothing if the value is nil' do
+    @subject.save!
+    assert_nil @subject.carbohydrate
+  end
+
   test '#units return a hash with all the units and their options' do
     units = [{ name: :protein, options: {} },
              { name: :carbohydrate, options: { convert_to: 'g' } }]

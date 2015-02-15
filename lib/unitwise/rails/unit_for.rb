@@ -77,7 +77,7 @@ module Unitwise
         name = @name
         convert_to_option = eval_option(@options[:convert_to], @klass)
         @klass.send :before_save do
-          return unless send("#{name}?")
+          next unless send("#{name}?")
           send("#{name}=", send(name).convert_to(convert_to_option))
         end
       end
